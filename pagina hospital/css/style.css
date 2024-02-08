@@ -1,0 +1,64 @@
+*{
+    padding: 0%;
+    margin: 0%;
+}
+body{
+    background-color: #67A4C7;
+}
+.logo {
+    display: flex;
+    align-items: center;
+}
+.logo img {
+    height: 9em;
+    margin-top: -2em;
+    margin-left: -1em;
+}
+.logo p {
+    font-size: 24px;
+    margin-left: 10px; /* Adjust as needed */
+    font-weight: bold;
+    margin-top: -27px;
+}
+
+
+.container{
+    display: flex;
+    float: inline-end;
+}
+
+.container-menu {
+    background-color: aliceblue;
+    padding: 5px;
+    height: 69px;
+    width: 44em;
+    border-top-left-radius: 36px;
+    border-bottom-left-radius: 46px;
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+}
+
+.container-menu a {
+    margin: 0 37px;
+    font-size: 28px;
+    text-decoration: none;
+    color: black;
+}
+
+.burbuja{
+    height: 63em;
+    margin-top: -167px;
+    background-color: white;
+    width: 61em;
+    border-top-right-radius: 33em;
+    border-bottom-right-radius: 35em;
+    background-color: #E1F4FF;
+}
+
+.burbuja img{
+    height: 837px;
+    width: 837px;
+    margin-left: -1vh;
+    margin-top: 18ch;
+}
