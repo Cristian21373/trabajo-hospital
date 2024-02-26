@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="../js/ingreso.js"></script>
+    <link rel="stylesheet" href="../css/medico.css">
+    <title>Registro ingreso</title>
+</head>
+
+<body>
+    <div class="container">
+        <a href="./listaIngreso.html"><button class="button">
+            <div class="button-box">
+              <span class="button-elem">
+                <svg viewBox="0 0 46 40" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M46 20.038c0-.7-.3-1.5-.8-2.1l-16-17c-1.1-1-3.2-1.4-4.4-.3-1.2 1.1-1.2 3.3 0 4.4l11.3 11.9H3c-1.7 0-3 1.3-3 3s1.3 3 3 3h33.1l-11.3 11.9c-1 1-1.2 3.3 0 4.4 1.2 1.1 3.3.8 4.4-.3l16-17c.5-.5.8-1.1.8-1.9z"
+                  ></path>
+                </svg>
+              </span>
+              <span class="button-elem">
+                <svg viewBox="0 0 46 40">
+                  <path
+                    d="M46 20.038c0-.7-.3-1.5-.8-2.1l-16-17c-1.1-1-3.2-1.4-4.4-.3-1.2 1.1-1.2 3.3 0 4.4l11.3 11.9H3c-1.7 0-3 1.3-3 3s1.3 3 3 3h33.1l-11.3 11.9c-1 1-1.2 3.3 0 4.4 1.2 1.1 3.3.8 4.4-.3l16-17c.5-.5.8-1.1.8-1.9z"
+                  ></path>
+                </svg>
+              </span>
+            </div>
+          </button>
+        </a>
+        <h1>Crear ingreso</h1>
+        <div class="row">
+            <div class="col col-xl-6 col-12">
+                <label for="habitacion">Habitación</label>
+                <input type="number" id="habitacion" class="form-control" onfocusout="validarNumeroCama(this);">
+            </div>
+            <div class="col col-xl-6 col-12">
+                <label for="cama">Cama</label>
+                <input type="number" id="cama" class="form-control">
+            </div>
+            <div class="col col-xl-6 col-12">
+              <label for="medicoSelect">medico</label>
+              <select id="medicoSelect" class="form-select">
+              </select>
+          </div>
+            <div class="col col-xl-6 col-12">
+                <label for="pacienteSelect">Paciente</label>
+                <select id="pacienteSelect" class="form-select">
+                </select>
+            </div>
+            <div class="col col-xl-6 col-12">
+                <label for="fechaIngreso">Escribe una fecha de ingreso:</label>
+                <input type="datetime-local" id="fechaIngreso" step="1" class="form-control" pattern="yyyy-MM-dd HH:mm:ss"> 
+            </div>                                                                             
+            <div class="col col-xl-6 col-12">
+                <label for="fechaSalida">Escribe una fecha de salida:</label>
+                <input type="datetime-local" id="fechaSalida" step="1" class="form-control" pattern="yyyy-MM-dd HH:mm:ss">
+            </div>
+            <div class="col col-xl-6 col-12">
+                <label for="estado">Estado</label>
+                <input type="text" id="estado" step="1" class="form-control">
+            </div>
+
+        </div>
+        <button class="btn btn-success" onclick="registrarIngreso()">Enviar</button>
+        <button class="btn btn-secondary">Limpiar</button>
+    </div>
+
+    <style>
+        /* estilo boton */
+        .button {
+   display: block;
+   position: relative;
+   width: 56px;
+   height: 56px;
+   margin: 0;
+   overflow: hidden;
+   outline: none;
+   background-color: transparent;
+   cursor: pointer;
+   border: 0;
+ }
+ 
+ .button:before,
+ .button:after {
+   content: "";
+   position: absolute;
+   border-radius: 50%;
+   inset: 7px;
+ }
+ 
+ .button:before {
+   border: 4px solid #f0eeef;
+   transition: opacity 0.4s cubic-bezier(0.77, 0, 0.175, 1) 80ms,
+     transform 0.5s cubic-bezier(0.455, 0.03, 0.515, 0.955) 80ms;
+ }
+ 
+ .button:after {
+   border: 4px solid #96daf0;
+   transform: scale(1.3);
+   transition: opacity 0.4s cubic-bezier(0.165, 0.84, 0.44, 1),
+     transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+   opacity: 0;
+ }
+ 
+ .button:hover:before,
+ .button:focus:before {
+   opacity: 0;
+   transform: scale(0.7);
+   transition: opacity 0.4s cubic-bezier(0.165, 0.84, 0.44, 1),
+     transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+ }
+ 
+ .button:hover:after,
+ .button:focus:after {
+   opacity: 1;
+   transform: scale(1);
+   transition: opacity 0.4s cubic-bezier(0.77, 0, 0.175, 1) 80ms,
+     transform 0.5s cubic-bezier(0.455, 0.03, 0.515, 0.955) 80ms;
+ }
+ 
+ .button-box {
+   display: flex;
+   position: absolute;
+   top: 0;
+   left: 0;
+ }
+ 
+ .button-elem {
+   display: block;
+   width: 20px;
+   height: 20px;
+   margin: 17px 18px 0 18px;
+   transform: rotate(180deg);
+   fill: #000000;
+ }
+ 
+ .button:hover .button-box,
+ .button:focus .button-box {
+   transition: 0.4s;
+   transform: translateX(-56px);
+ }
+ 
+ </style>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            cargarListaPacientes();
+        });
+    </script>
+</body>
+</html>
