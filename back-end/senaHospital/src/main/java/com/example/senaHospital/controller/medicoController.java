@@ -52,9 +52,16 @@ public class medicoController {
 	
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Object> delete(@PathVariable("id") String id){
-		medicoService.delete(id);
-		return new ResponseEntity<>("Registro Eliminado",HttpStatus.OK);
+	medicoService.delete(id);
+	return new ResponseEntity<>("Registro Eliminado",HttpStatus.OK);
 	}
+	
+	//@DeleteMapping("/api/v1/medico/{id}")
+	//public ResponseEntity<String> eliminarMedico(@PathVariable String id) {
+	//medicoService.delete(id);
+	//return new ResponseEntity<>("Registro Eliminado",HttpStatus.OK);
+	    
+	//}
 	
 	
 	@PutMapping("/{id}")

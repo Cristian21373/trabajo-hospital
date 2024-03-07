@@ -1,10 +1,13 @@
 package com.example.senaHospital.models;
 
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
 
 /*
@@ -13,7 +16,8 @@ import jakarta.persistence.Id;
 @Entity(name="Medicos")
 
 public class medico {
-	
+	 @OneToMany(mappedBy = "medico")
+	    private List<ingreso> ingresos;
 	/*
 	 id
 	 tipo_documento
@@ -192,12 +196,7 @@ public class medico {
 	public void setEstado(String estado) {
 		this.estado = estado;
 	}
-	
-	
-	
-	
-	
-	
+
 }
 
 
