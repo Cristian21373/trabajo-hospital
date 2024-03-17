@@ -10,10 +10,6 @@ import com.example.senaHospital.interfaceService.I_IngresoService;
 import com.example.senaHospital.interfaces.I_Ingreso;
 import com.example.senaHospital.models.ingreso;
 
-
-
-
-
 @Service
 
 public class ingresoService implements I_IngresoService{
@@ -36,7 +32,13 @@ public class ingresoService implements I_IngresoService{
 		//se convierte a list<ingreso>
 		return listaingreso;
 	}
-
+	
+	@Override
+	public List<ingreso> filtroIngreso(String filtro) {
+		List <ingreso> listaIngreso=data.filtroIngreso(filtro);
+		return listaIngreso;
+	}
+	
 	@Override
 	public Optional<ingreso> findOne(String id) {
 		Optional<ingreso> ingreso=data.findById(id);

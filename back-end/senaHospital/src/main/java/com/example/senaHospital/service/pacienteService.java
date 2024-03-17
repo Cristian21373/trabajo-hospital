@@ -11,7 +11,7 @@ import com.example.senaHospital.interfaces.IPaciente;
 import com.example.senaHospital.models.paciente;
 
 @Service
-public class pacienteService implements IPacienteService {
+public class pacienteService implements IPacienteService{
 
 	@Autowired
 	private IPaciente data;
@@ -25,12 +25,21 @@ public class pacienteService implements IPacienteService {
 	@Override
 	public List<paciente> findAll() {
 		List<paciente> listaPaciente=(List<paciente>) data.findAll();
+		
 		return listaPaciente;
 	}
+	
+	@Override
+	public List<paciente> filtroPaciente(String filtro) {
+		List <paciente> listaPaciente=data.filtroPaciente(filtro);
+		return listaPaciente;
+	}
+
 
 	@Override
 	public Optional<paciente> findOne(String id) {
 		Optional<paciente> paciente=data.findById(id);
+		
 		return paciente;
 	}
 

@@ -75,8 +75,14 @@ cargarListaPacientes();
 
 // Función para listar los ingresos
 function listaIngreso() {
+    //Se crea el filtro
+    var capturarFiltro = document.getElementById("Search").value;
+    var urlIngreso=url;
+    if (capturarFiltro!=""){
+        urlIngreso+="busquedafiltro/"+capturarFiltro;
+  }
     $.ajax({
-        url: url,
+        url: urlIngreso,
         type: "GET",
         success: function (result) {
             console.log(result);
@@ -107,8 +113,8 @@ function listaIngreso() {
                 var paciente=result[i]["paciente"]
                 celdaPaciente.innerText = paciente["primer_name"]+" "+ paciente["segundo_name"] || "";
                 //eta era la que yo tenia  y mentiras que es la de arriba xdd: celdaPaciente.innerText = result[i]["pacienteSelect"] || "";
-                celdaFechaIngreso.innerText = result[i]["fechaIngreso"] || "";
-                celdaFechaSalida.innerText = result[i]["fechaSalida"] || "";
+                celdaFechaIngreso.innerText = result[i]["fecha_ingreso"] || "";
+                celdaFechaSalida.innerText = result[i]["fecha_salida"] || "";
                 celdaEstado.innerText = result[i]["estado"] || "";
 
                 let botonEditar = document.createElement("a");
@@ -163,13 +169,13 @@ function listaIngreso() {
                                                         </select>
                                                     </div>
                                                     <div class="col col-xl-6 col-12 Dark__container">
-                                                    <label  class="Dark__label" for="fechaIngreso">Escribe una fecha de ingreso:</label>
-                                                    <input type="datetime-local" id="fechaIngreso" step="1" class="form-control  Dark__input" pattern="yyyy-MM-ddTHH:mm:ss">
+                                                    <label  class="Dark__label" for="fecha_ingreso">Escribe una fecha de ingreso:</label>
+                                                    <input type="datetime-local" id="fecha_ingreso" step="1" class="form-control  Dark__input" pattern="yyyy-MM-ddTHH:mm:ss">
                                                 </div>
 
                                                 <div class="col col-xl-6 col-12 Dark__container">
-                                                <label  class="Dark__label" for="fechaSalida">Escribe una fecha de salida:</label>
-                                                <input type="datetime-local" id="fechaSalida" step="1" class="form-control  Dark__input" pattern="yyyy-MM-ddTHH:mm:ss">
+                                                <label  class="Dark__label" for="fecha_salida">Escribe una fecha de salida:</label>
+                                                <input type="datetime-local" id="fecha_salida" step="1" class="form-control  Dark__input" pattern="yyyy-MM-ddTHH:mm:ss">
                                             </div>
                                             <div class="col col-xl-6 col-12  Dark__containerSelect">
                                             <label class="Dark__label"  for="estado">Estado</label>
@@ -238,14 +244,15 @@ function listaIngreso() {
 
 
 function cargarDatosIngresoEnFormulario(idIngreso) {
+    
     $.ajax({
         url: url + idIngreso,
         type: "GET",
         success: function (ingreso) {
             document.getElementById("habitacion").value = ingreso.habitacion;
             document.getElementById("cama").value = ingreso.cama;
-            document.getElementById("fechaIngreso").value = ingreso.fechaIngreso;
-            document.getElementById("fechaSalida").value = ingreso.fechaSalida;
+            document.getElementById("fecha_ingreso").value = ingreso.fechaIngreso;
+            document.getElementById("fecha_salida").value = ingreso.fechaSalida;
             document.getElementById("estado").value = ingreso.estado;
 
             // Cargar la lista de médicos y pacientes en el modal
@@ -323,8 +330,8 @@ function guardarCambiosIngreso(idIngreso) {
         "cama": document.getElementById("cama").value,
         "medico": document.getElementById("medicoSelectModal").value,
         "paciente": document.getElementById("pacienteSelectModal").value,
-        "fechaIngreso": document.getElementById("fechaIngreso").value,
-        "fechaSalida": document.getElementById("fechaSalida").value,
+        "fecha_ingreso": document.getElementById("fecha_ingreso").value,
+        "fecha_salida": document.getElementById("fecha_salida").value,
         "estado": document.getElementById("estado").value
     };
 
@@ -423,12 +430,12 @@ function eliminarIngreso(idIngreso) {
 // Función para registrar un ingreso
 function registrarIngreso() {
     let formData = {
+        "paciente": document.getElementById("pacienteSelect").value,
+        "medico": document.getElementById("medicoSelect").value,
         "habitacion": document.getElementById("habitacion").value,
         "cama": document.getElementById("cama").value,
-        "medico": document.getElementById("medicoSelect").value,
-        "paciente": document.getElementById("pacienteSelect").value,
-        "fechaIngreso": document.getElementById("fechaIngreso").value,
-        "fechaSalida": document.getElementById("fechaSalida").value,
+        "fecha_ingreso": document.getElementById("fecha_ingreso").value,
+        "fecha_salida": document.getElementById("fecha_salida").value,
         "estado": document.getElementById("estado").value
     };
 

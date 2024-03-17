@@ -1,8 +1,15 @@
 var url = "http://localhost:8080/api/v1/paciente/";
 
 function listaPaciente() {
+
+    //Se crea el filtro
+    var capturarFiltro = document.getElementById("Search").value;
+    var urlPaciente=url;
+    if (capturarFiltro!=""){
+        urlPaciente+="busquedafiltro/"+capturarFiltro;
+  }
     $.ajax({
-        url: url,
+        url: urlPaciente,
         type: "GET",
         success: function (result) {
             console.log(result);

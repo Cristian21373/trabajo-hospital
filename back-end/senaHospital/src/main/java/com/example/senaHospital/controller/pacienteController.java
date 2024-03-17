@@ -20,6 +20,7 @@ import com.example.senaHospital.models.paciente;
 @RequestMapping("/api/v1/paciente/")
 @RestController
 @CrossOrigin
+
 public class pacienteController {
 	
 	@Autowired
@@ -27,7 +28,6 @@ public class pacienteController {
 	
 	@PostMapping("/")
 	public ResponseEntity<Object> save(
-			
 			@ModelAttribute("paciente")paciente paciente
 			){
 		pacienteService.save(paciente);
@@ -37,8 +37,14 @@ public class pacienteController {
 	
 	@GetMapping("/")
 	public ResponseEntity<Object> findAll(){
-		var listaPacientes=pacienteService.findAll();
-		return new ResponseEntity<>(listaPacientes,HttpStatus.OK);
+		var ListaPacientes=pacienteService.findAll();
+		return new ResponseEntity<>(ListaPacientes,HttpStatus.OK);
+	}
+	
+	@GetMapping("/busquedafiltro/{filtro}")
+	public ResponseEntity<Object>findFiltro(@PathVariable String filtro){
+		var ListaPaciente = pacienteService.filtroPaciente(filtro);
+		return new ResponseEntity<>(ListaPaciente, HttpStatus.OK);
 	}
 	
 	

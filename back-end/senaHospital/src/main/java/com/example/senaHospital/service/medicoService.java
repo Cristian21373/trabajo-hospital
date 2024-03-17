@@ -10,44 +10,41 @@ import com.example.senaHospital.interfaceService.IMedicoService;
 import com.example.senaHospital.interfaces.IMedico;
 import com.example.senaHospital.models.medico;
 
-
-
-
-
 @Service
+public class medicoService implements IMedicoService {
 
-public class medicoService implements IMedicoService{
+    @Autowired
+    private IMedico data;
 
-	@Autowired
-	private IMedico data;
+    @Override
+    public String save(medico medico) {
+        data.save(medico);
+        return medico.getId();
+    }
 
-	@Override
-	public String save(medico medico) {
-		data.save(medico);
-		return medico.getId();
-	}
-
-	@Override
-	public List<medico> findAll() {
-		List<medico> listaMedico=(List<medico>) data.findAll();
-		//(List<client>) es un cast ya que
-		//findAll() retorna un objeto distinto
-		//retorna iterable<medico>
-		//se convierte a list<medico>
+    @Override
+    public List<medico> findAll() {
+        List<medico> listaMedico = (List<medico>) data.findAll();
+        
+        return listaMedico;
+    }
+    @Override
+	public List<medico> filtroMedico(String filtro) {
+		List <medico> listaMedico=data.filtroMedico(filtro);
 		return listaMedico;
 	}
 
-	@Override
-	public Optional<medico> findOne(String id) {
-		Optional<medico> medico=data.findById(id);
-		return medico;
-	}
+    @Override
+    public Optional<medico> findOne(String id) {
+        Optional<medico> medico = data.findById(id);
+        
+        return medico;
+    }
 
-	@Override
-	public int delete(String id) {
-		data.deleteById(id);
-		return 1;
-	}
-	
-	
+    @Override
+    public int delete(String id) {
+        data.deleteById(id);
+        return 1;
+    }
+
 }

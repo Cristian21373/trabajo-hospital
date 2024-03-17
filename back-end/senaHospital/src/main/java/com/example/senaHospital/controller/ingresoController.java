@@ -42,9 +42,16 @@ public class ingresoController {
 	
 	@GetMapping("/")
 	public ResponseEntity<Object> findAll(){
-		var listaingreso=ingresoService.findAll();
-		return new ResponseEntity<>(listaingreso,HttpStatus.OK);
+		var Listaingreso=ingresoService.findAll();
+		return new ResponseEntity<>(Listaingreso,HttpStatus.OK);
 	}
+	
+	//filtro
+			@GetMapping("/busquedafiltro/{filtro}")
+			public ResponseEntity<Object>filtroIngreso(@PathVariable String filtro){
+				var ListaIngreso = ingresoService.filtroIngreso(filtro);
+				return new ResponseEntity<>(ListaIngreso, HttpStatus.OK);
+			}
 	
 	//@PathVariable recibe una variable por el enlace
 	
@@ -70,8 +77,8 @@ public class ingresoController {
 			ingreso.setMedico(ingresoUpdate.getMedico());
 			ingreso.setHabitacion(ingresoUpdate.getHabitacion());
 			ingreso.setCama(ingresoUpdate.getCama());
-			ingreso.setFechaIngreso(ingresoUpdate.getFechaIngreso());
-			ingreso.setFechaSalida(ingresoUpdate.getFechaSalida());
+			ingreso.setFecha_ingreso(ingresoUpdate.getFecha_ingreso());
+			ingreso.setFecha_salida(ingresoUpdate.getFecha_salida());
 			ingreso.setEstado(ingresoUpdate.getEstado());
 			
 		

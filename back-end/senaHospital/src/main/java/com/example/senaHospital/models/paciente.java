@@ -1,20 +1,17 @@
 package com.example.senaHospital.models;
 
-import java.util.List;
+
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 
-@Entity(name="Pacientes")
+@Entity
 
 public class paciente {
-	 @OneToMany(mappedBy = "paciente")
-	    private List<ingreso> ingresos;
-
+	 
 	@Id
 	@GeneratedValue(strategy =GenerationType.UUID)
 	@Column(name="id", nullable=false, length = 36)
@@ -24,7 +21,7 @@ public class paciente {
 	private String tipo_documento;
 	
 	@Column(name="numero_documento", nullable=false, length = 11)
-	private int numero_documento;
+	private String numero_documento;
 	
 	@Column(name="primer_name", nullable=false, length = 20)
 	private String primer_name;
@@ -58,16 +55,20 @@ public class paciente {
 
 	@Column(name = "estado", nullable = false, length = 13)
 	private String estado;
-	
+
+
 	public paciente() {
 		super();
 	}
-	
-	public paciente(String id, String tipo_documento, int numero_documento, String primer_name,
-			String segundo_name, String primer_apellido, String segundo_apellido, String telefono, String correo, String nombre_contacto,  String telefono_contacto, String estado ) {
+
+
+	public paciente(String id, String tipo_documento, String numero_documento, String primer_name, String segundo_name,
+			String primer_apellido, String segundo_apellido, String telefono, String correo, String nombre_contacto,
+			String telefono_contacto, String estado) {
 		super();
 		this.id = id;
 		this.tipo_documento = tipo_documento;
+		this.numero_documento = numero_documento;
 		this.primer_name = primer_name;
 		this.segundo_name = segundo_name;
 		this.primer_apellido = primer_apellido;
@@ -78,101 +79,127 @@ public class paciente {
 		this.telefono_contacto = telefono_contacto;
 		this.estado = estado;
 	}
+
 
 	public String getId() {
 		return id;
 	}
 
+
 	public void setId(String id) {
 		this.id = id;
 	}
+
 
 	public String getTipo_documento() {
 		return tipo_documento;
 	}
 
+
 	public void setTipo_documento(String tipo_documento) {
 		this.tipo_documento = tipo_documento;
 	}
 
-	public int getNumero_documento() {
+
+	public String getNumero_documento() {
 		return numero_documento;
 	}
 
-	public void setNumero_documento(int numero_documento) {
+
+	public void setNumero_documento(String numero_documento) {
 		this.numero_documento = numero_documento;
 	}
+
 
 	public String getPrimer_name() {
 		return primer_name;
 	}
 
+
 	public void setPrimer_name(String primer_name) {
 		this.primer_name = primer_name;
 	}
+
 
 	public String getSegundo_name() {
 		return segundo_name;
 	}
 
+
 	public void setSegundo_name(String segundo_name) {
 		this.segundo_name = segundo_name;
 	}
+
 
 	public String getPrimer_apellido() {
 		return primer_apellido;
 	}
 
+
 	public void setPrimer_apellido(String primer_apellido) {
 		this.primer_apellido = primer_apellido;
 	}
+
 
 	public String getSegundo_apellido() {
 		return segundo_apellido;
 	}
 
+
 	public void setSegundo_apellido(String segundo_apellido) {
 		this.segundo_apellido = segundo_apellido;
 	}
+
 
 	public String getTelefono() {
 		return telefono;
 	}
 
+
 	public void setTelefono(String telefono) {
 		this.telefono = telefono;
 	}
+
 
 	public String getCorreo() {
 		return correo;
 	}
 
+
 	public void setCorreo(String correo) {
 		this.correo = correo;
 	}
+
 
 	public String getNombre_contacto() {
 		return nombre_contacto;
 	}
 
+
 	public void setNombre_contacto(String nombre_contacto) {
 		this.nombre_contacto = nombre_contacto;
 	}
+
 
 	public String getTelefono_contacto() {
 		return telefono_contacto;
 	}
 
+
 	public void setTelefono_contacto(String telefono_contacto) {
 		this.telefono_contacto = telefono_contacto;
 	}
-	
+
+
 	public String getEstado() {
 		return estado;
 	}
 
+
 	public void setEstado(String estado) {
 		this.estado = estado;
 	}
+	
+	
 	
 }

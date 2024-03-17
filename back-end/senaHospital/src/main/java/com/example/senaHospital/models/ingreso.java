@@ -10,7 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
-@Entity(name = "Ingresos")
+@Entity
 public class ingreso {
 
     @Id
@@ -19,11 +19,11 @@ public class ingreso {
     private String id;
 
     @ManyToOne
-    @JoinColumn(name = "paciente", nullable = false)
+    @JoinColumn(name = "paciente")
     private paciente paciente;
 
     @ManyToOne
-    @JoinColumn(name = "medico", nullable = false)
+    @JoinColumn(name = "medico")
     private medico medico;
 
 
@@ -35,29 +35,30 @@ public class ingreso {
 
   
     @Column(name = "fecha_ingreso", nullable = false)
-    private String fechaIngreso;
+    private String fecha_ingreso;
 
   
     @Column(name = "fecha_salida", nullable = false)
-    private String fechaSalida;
+    private String fecha_salida;
 
 	@Column(name="estado", nullable=false, length = 13)
 	private String estado;
-	
+
 	public ingreso() {
 		super();
 	}
 
-	public ingreso(String id, paciente paciente, medico medico, String habitacion, String cama, String fechaIngreso,
-			String fechaSalida, String estado) {
+	public ingreso(String id, com.example.senaHospital.models.paciente paciente,
+			com.example.senaHospital.models.medico medico, String habitacion, String cama, String fecha_ingreso,
+			String fecha_salida, String estado) {
 		super();
 		this.id = id;
 		this.paciente = paciente;
 		this.medico = medico;
 		this.habitacion = habitacion;
 		this.cama = cama;
-		this.fechaIngreso = fechaIngreso;
-		this.fechaSalida = fechaSalida;
+		this.fecha_ingreso = fecha_ingreso;
+		this.fecha_salida = fecha_salida;
 		this.estado = estado;
 	}
 
@@ -101,20 +102,20 @@ public class ingreso {
 		this.cama = cama;
 	}
 
-	public String getFechaIngreso() {
-		return fechaIngreso;
+	public String getFecha_ingreso() {
+		return fecha_ingreso;
 	}
 
-	public void setFechaIngreso(String fechaIngreso) {
-		this.fechaIngreso = fechaIngreso;
+	public void setFecha_ingreso(String fecha_ingreso) {
+		this.fecha_ingreso = fecha_ingreso;
 	}
 
-	public String getFechaSalida() {
-		return fechaSalida;
+	public String getFecha_salida() {
+		return fecha_salida;
 	}
 
-	public void setFechaSalida(String fechaSalida) {
-		this.fechaSalida = fechaSalida;
+	public void setFecha_salida(String fecha_salida) {
+		this.fecha_salida = fecha_salida;
 	}
 
 	public String getEstado() {
@@ -124,6 +125,8 @@ public class ingreso {
 	public void setEstado(String estado) {
 		this.estado = estado;
 	}
+
+	
 	
     
 }

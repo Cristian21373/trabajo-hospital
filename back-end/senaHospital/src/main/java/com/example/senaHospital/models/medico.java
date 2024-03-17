@@ -1,23 +1,21 @@
 package com.example.senaHospital.models;
 
-import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+
 
 
 /*
 @Entity, es una anotacion bean que indica el nombre de la entidad en la base de datos*/
 
-@Entity(name="Medicos")
+@Entity
 
 public class medico {
-	 @OneToMany(mappedBy = "medico")
-	    private List<ingreso> ingresos;
+	 
 	/*
 	 id
 	 tipo_documento
@@ -43,7 +41,7 @@ public class medico {
 	
 	
 	@Column(name="numero_documento", nullable=false, length = 11)
-	private int numero_documento;
+	private String numero_documento;
 	
 	
 	@Column(name="primer_name", nullable=false, length = 20)
@@ -69,7 +67,7 @@ public class medico {
 	@Column(name="correo", nullable=false, length = 200)
 	private String correo;
 	
-	
+
 	@Column(name="estado", nullable=false, length = 13)
 	private String estado;
 
@@ -82,7 +80,7 @@ public class medico {
 	}
 
 
-	public medico(String id, String tipo_documento, int numero_documento, String primer_name, String segundo_name,
+	public medico(String id, String tipo_documento, String numero_documento, String primer_name, String segundo_name,
 			String primer_apellido, String segundo_apellido, String telefono, String correo, String estado) {
 		super();
 		this.id = id;
@@ -118,12 +116,12 @@ public class medico {
 	}
 
 
-	public int getNumero_documento() {
+	public String getNumero_documento() {
 		return numero_documento;
 	}
 
 
-	public void setNumero_documento(int numero_documento) {
+	public void setNumero_documento(String numero_documento) {
 		this.numero_documento = numero_documento;
 	}
 
@@ -196,7 +194,12 @@ public class medico {
 	public void setEstado(String estado) {
 		this.estado = estado;
 	}
-
+	
+	
 }
+
+
+
+	
 
 

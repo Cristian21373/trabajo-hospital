@@ -2,6 +2,7 @@ package com.example.senaHospital.interfaceService;
 
 import java.util.List;
 import java.util.Optional;
+
 import com.example.senaHospital.models.ingreso;
 
 
@@ -17,6 +18,7 @@ public interface I_IngresoService {
 	
 public String save(ingreso medico);	
 public List<ingreso> findAll();
+public List<ingreso> filtroIngreso(String filtro);
 public Optional<ingreso> findOne(String id);
 public int delete(String id);
 

@@ -1,8 +1,14 @@
 var url = "http://localhost:8080/api/v1/medico/";
 
 function listaMedico() {
+    //Se crea el filtro
+    var capturarFiltro = document.getElementById("Search").value;
+    var urlMedico=url;
+    if (capturarFiltro!=""){
+        urlMedico+="busquedafiltro/"+capturarFiltro;
+  }
     $.ajax({
-        url: url,
+        url: urlMedico,
         type: "GET",
         success: function (result) {
             console.log(result);
