@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <title>Contenedor Centrado con Bootstrap</title>
+</head>
+<body>
+<div class="center-container">
+  <h1>SENA  HOSPITAL</h1>
+    <div class="row">
+      <div class="col-md-4">
+        <div class=" text-light p-3">
+            <div class="container">
+                <div class="box">
+                  <span class="title">Listado Medicos</span>
+                  <div>
+                    <strong>Lorem ipsum dolor sit amet consectetur.</strong>
+                    <a href="./view/listaMedicos.html" class="button">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75"></path></svg>
+                    <div class="text">Ir</div></a>
+                  </div>
+                </div>
+              </div>
+        </div>
+    </div>
+        <div class="col-md-4">
+            <div class=" text-light p-3">
+                <div class="container">
+                    <div class="box">
+                      <span class="title">Listado Pacientes</span>
+                      <div>
+                        <strong>Lorem ipsum dolor sit amet consectetur.  </strong>
+                        <a href="./view/listaPaciente.html" class="button">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75"></path></svg>
+                        <div class="text">Ir</div></a>
+                      </div>
+                    </div>
+                  </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+          <div class=" text-light p-3">
+              <div class="container">
+                  <div class="box">
+                    <span class="title">Listado Ingresos</span>
+                    <div>
+                      <strong>Lorem ipsum dolor sit amet consectetur.  </strong>
+                      <a href="./view/listaIngreso.html" class="button">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75"></path></svg>
+                      <div class="text">Ir</div></a>
+                    </div>
+                  </div>
+                </div>
+          </div>
+      </div>
+    </div>
+</div>
+<style>
+    body {
+        background-color: #000;
+    }
+
+      /* Estilo personalizado para centrar el contenido */
+      .center-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+    .container {
+  color: white;
+  position: relative;
+  font-family: sans-serif;
+}
+
+.container::before,
+.container::after {
+  content: "";
+  background-color: #00ffea71;
+  position: absolute;
+}
+
+.container::before {
+  border-radius: 50%;
+  width: 6rem;
+  height: 6rem;
+  top: 30%;
+  right: 7%;
+}
+
+.container::after {
+  content: "";
+  position: absolute;
+  height: 3rem;
+  top: 8%;
+  right: 5%;
+  border: 1px solid;
+}
+
+.container .box {
+  width: 11.875em;
+  height: 15.875em;
+  padding: 1rem;
+  background-color: rgba(255, 255, 255, 0.074);
+  border: 1px solid rgba(255, 255, 255, 0.222);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  border-radius: 0.7rem;
+  transition: all ease 0.3s;
+}
+
+.container .box {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.container .box .title {
+  font-size: 2rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+}
+
+.container .box div strong {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.container .box div p {
+  margin: 0;
+  font-size: 0.9em;
+  font-weight: 300;
+  letter-spacing: 0.1em;
+}
+
+
+.container .box:hover {
+  box-shadow: 0px 0px 20px 1px #ffbb763f;
+  border: 1px solid rgba(255, 255, 255, 0.454);
+}
+
+
+/* estilo para boton */
+.button {
+            background-color: #01546de5;
+            color: #fff;
+            width: 100%;
+            height: 2.9em;
+            border: none;
+            border-radius: 11px;
+            text-align: center;
+            transition: background-color 0.6s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .button svg {
+            width: 1.6em;
+            margin-right: 0.5em;
+            transition: transform 0.6s ease;
+        }
+
+        .button:hover {
+            background-color: #1e8cd1;
+        }
+
+        .button:hover svg {
+            transform: translateX(5px);
+        }
+
+        .text {
+            margin: 0 1.5em;
+        }
+
+</style>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

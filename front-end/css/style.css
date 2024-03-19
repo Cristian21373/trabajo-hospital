@@ -1,0 +1,425 @@
+/* Add this CSS for the futuristic and elegant design */
+
+body {
+    background-color: #000000;
+    font-family: 'Roboto', sans-serif;
+}
+
+.container {
+    margin-top: 50px;
+    background-color: #000000;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+}
+
+h1 {
+    color: #6e6c6c;
+}
+
+label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #555;
+}
+
+select,
+input {
+    margin-bottom: 15px;
+}
+
+.btn {
+    margin-top: 15px;
+    margin-right: 10px;
+}
+
+/* Styling the select input */
+.form-select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-size: 20px;
+    padding-right: 30px;
+}
+
+/* Additional styling for input fields */
+.form-control {
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    padding: 8px;
+    width: 100%;
+}
+
+/* Styling the buttons */
+.btn-success {
+    background-color: #28a745;
+    color: #fff;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: #fff;
+}
+
+/* Responsive design adjustments */
+@media (max-width: 767px) {
+    .col {
+        margin-bottom: 20px;
+    }
+}
+
+
+   /* estilo boton */
+   .button {
+    display: block;
+    position: relative;
+    width: 56px;
+    height: 56px;
+    margin: 0;
+    overflow: hidden;
+    outline: none;
+    background-color: transparent;
+    cursor: pointer;
+    border: 0;
+  }
+  
+  .button:before,
+  .button:after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    inset: 7px;
+  }
+  
+  .button:before {
+    border: 4px solid #f0eeef;
+    transition: opacity 0.4s cubic-bezier(0.77, 0, 0.175, 1) 80ms,
+      transform 0.5s cubic-bezier(0.455, 0.03, 0.515, 0.955) 80ms;
+  }
+  
+  .button:after {
+    border: 4px solid #96daf0;
+    transform: scale(1.3);
+    transition: opacity 0.4s cubic-bezier(0.165, 0.84, 0.44, 1),
+      transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    opacity: 0;
+  }
+  
+  .button:hover:before,
+  .button:focus:before {
+    opacity: 0;
+    transform: scale(0.7);
+    transition: opacity 0.4s cubic-bezier(0.165, 0.84, 0.44, 1),
+      transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+  
+  .button:hover:after,
+  .button:focus:after {
+    opacity: 1;
+    transform: scale(1);
+    transition: opacity 0.4s cubic-bezier(0.77, 0, 0.175, 1) 80ms,
+      transform 0.5s cubic-bezier(0.455, 0.03, 0.515, 0.955) 80ms;
+  }
+  
+  .button-box {
+    display: flex;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  
+  .button-elem {
+    display: block;
+    width: 20px;
+    height: 20px;
+    margin: 17px 18px 0 18px;
+    transform: rotate(180deg);
+    fill: #f0eeef;
+  }
+  
+  .button:hover .button-box,
+  .button:focus .button-box {
+    transition: 0.4s;
+    transform: translateX(-56px);
+  }
+  /* Estilos para colores alternos */
+  .fila-par {
+      background-color: #f2f2f2; /* Color de fondo para filas pares */
+  }
+  
+  .fila-impar {
+      background-color: #000000; /* Color de fondo para filas impares */
+  }
+
+
+
+/*-------------------- buscador ---------------------*/
+.container__buscardor {
+
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  position: relative;
+  color: white;
+}
+
+.container__buscardor .label__buscador {
+  font-size: 15px;
+  padding-left: 10px;
+  position: absolute;
+  top: 13px;
+  transition: 0.3s;
+  pointer-events: none;
+}
+
+.input__buscador {
+  width: 70rem;
+  height: 45px;
+  border: none;
+  outline: none;
+  padding: 0px 7px;
+  border-radius: 6px;
+  color: #fff;
+  font-size: 15px;
+  background-color: transparent;
+  box-shadow: 3px 3px 10px rgb(0 208 255),
+  -1px -1px 6px rgba(255, 255, 255, 0.4);
+}
+
+.input__buscador:focus {
+  border: 2px solid transparent;
+  color: #fff;
+  box-shadow: 3px 3px 10px rgba(0,0,0,1),
+  -1px -1px 6px rgba(0, 250, 200, 0.887),
+  inset 3px 3px 10px rgba(0,0,0,1),
+  inset -1px -1px 6px rgba(0, 250, 200, 0.887);
+}
+
+.container__buscardor .input__buscador:valid ~ .label__buscador,
+.container__buscardor .input__buscador:focus ~ .label__buscador {
+  transition: 0.3s;
+  padding-left: 2px;
+  transform: translateY(-35px);
+}
+
+.container__buscardor .input__buscador:valid,
+.container__buscardor .input__buscador:focus {
+  box-shadow: 3px 3px 10px rgba(0,0,0,1),
+  -1px -1px 6px rgba(0, 227, 227, 0.4),
+  inset 3px 3px 10px rgba(0,0,0,1),
+  inset -1px -1px 6px rgba(0, 199, 243, 0.4);
+}
+/* ----------------------cierre buscador -------------<*/
+
+
+
+
+/*-------- estilo para los encabezados de la tabla----------- */
+
+.thform-fieldd {
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+ 
+  border-radius: 12px;
+  border: none;
+  outline: none;
+  color: #0dcaf0;
+  background-color: #00c4ff57;
+  box-shadow: inset -20px -2px 20px 8px rgb(0 0 0);
+  border: 1px solid #31303042;
+  text-align: left;
+  padding: 8px; /* Dejé solo una instancia de la propiedad padding */
+}
+
+
+
+.form-fieldd {
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  border-radius: 12px;
+  padding: 0.6em;
+  border: none;
+  outline: none;
+  color: white;
+  background-color: #058db60d;
+  box-shadow: inset -20px 8px 20px 0px rgb(0 0 0);
+}
+
+.form-fielddd {
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  border-radius: 6px;
+  padding: 0.6rem;
+  border: none;
+  outline: none;
+  color: #646464;
+  background-color: #000000;
+  box-shadow: inset -6px 0px 6px 0px rgb(2 241 241 / 25%);
+}
+/*-------- cierre estilo para los encabezados de la tabla----------- */
+
+
+
+
+  /* estilos input crearMeidco */
+  .Dark__container {
+    position: relative;
+    color: white;
+}
+
+.Dark__container .Dark__input {
+    width: 100%;
+    height: 45px;
+    border: none;
+    outline: none;
+    padding: 0px 7px;
+    border-radius: 6px;
+    color: #fff;
+    font-size: 15px;
+    background-color: transparent;
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 1),
+        -1px -1px 6px rgba(255, 255, 255, 0.4);
+    transition: 0.3s;
+}
+
+.Dark__container .Dark__input:focus {
+    border: 2px solid transparent;
+    color: #fff;
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 1),
+        -1px -1px 6px rgba(255, 255, 255, 0.4),
+        inset 3px 3px 10px rgba(0, 0, 0, 1),
+        inset -1px -1px 6px rgba(255, 255, 255, 0.4);
+}
+
+.Dark__container .Dark__input:valid ~ .Dark__label,
+.Dark__container .Dark__input:focus ~ .Dark__label {
+    padding-left: 2px;
+    transform: translateY(-35px);
+}
+
+.Dark__container .Dark__input:valid,
+.Dark__container .Dark__input:focus {
+    box-shadow: 3px 3px 10px rgb(0 244 255),
+        -1px -1px 6px rgba(255, 255, 255, 0.4),
+        inset 3px 3px 10px rgba(0, 0, 0, 1),
+        inset -1px -1px 6px rgba(255, 255, 255, 0.4);
+}
+
+  /* select */
+  .Dark__containerSelect {
+    position: relative;
+    color: white;
+}
+
+.Dark__containerSelect select {
+    width: 100%;
+    height: 45px;
+    border: none;
+    outline: none;
+    padding: 0px 7px;
+    border-radius: 6px;
+    color: #fff;
+    font-size: 15px;
+    background-color: transparent;
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 1),
+        -1px -1px 6px rgba(255, 255, 255, 0.4);
+}
+
+.Dark__containerSelect select:focus {
+    border: 2px solid transparent;
+    color: #fff;
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, 1),
+        -1px -1px 6px rgba(255, 255, 255, 0.4),
+        inset 3px 3px 10px rgba(0, 0, 0, 1),
+        inset -1px -1px 6px rgba(255, 255, 255, 0.4);
+}
+
+.Dark__containerSelect select:valid ~ .Dark__label,
+.Dark__containerSelect select:focus ~ .Dark__label {
+    transition: 0.3s;
+    padding-left: 2px;
+    transform: translateY(-35px);
+}
+
+.Dark__containerSelect select:valid,
+.Dark__containerSelect select:focus {
+    box-shadow: 3px 3px 10px rgb(0 244 255 / 92%),
+        -1px -1px 6px rgba(255, 255, 255, 0.4),
+        inset 3px 3px 10px rgba(0, 0, 0, 1),
+        inset -1px -1px 6px rgba(255, 255, 255, 0.4);
+}
+.Dark__containerSelect select option {
+  background-color: #000000;
+  color: #ffffff;
+  border: none;
+}
+
+  /* cierre estilo select */
+  /*cierre estilos input crearMeidco */
+
+
+  /* estilos para el modal */
+
+  .modal-content {
+    background-color: #000000;
+  }
+
+    /*cierre para  estilos de el modal */
+
+/* estilos para el boton editar */
+.boton-editar {
+  padding: 10px 20px;
+  text-transform: uppercase;
+  border-radius: 8px;
+  font-size: 17px;
+  font-weight: 500;
+  color: #ffffff80;
+  text-shadow: none;
+  background: transparent;
+  cursor: pointer;
+  box-shadow: transparent;
+  border: 1px solid #ffffff80;
+  transition: 0.5s ease;
+  user-select: none;
+}
+
+.boton-editar:hover {
+  color: #ffffff;
+  background: #008cff;
+  border: 1px solid #008cff;
+  text-shadow: 0 0 5px #ffffff, 0 0 10px #ffffff, 0 0 20px #ffffff;
+  box-shadow: 0 0 5px #008cff, 0 0 20px #008cff, 0 0 50px #008cff,
+    0 0 100px #008cff;
+}
+
+/* cierre estilos para el boton editar */
+
+/*estilos boton eliminar */
+.boton-eliminar {
+  padding: 10px 20px;
+  text-transform: uppercase;
+  border-radius: 8px;
+  font-size: 17px;
+  font-weight: 500;
+  color: #ffffff80;
+  text-shadow: none;
+  background: transparent;
+  cursor: pointer;
+  box-shadow: transparent;
+  border: 1px solid #ffffff80;
+  transition: 0.5s ease;
+  user-select: none;
+}
+
+.boton-eliminar:hover {
+  color: #ffffff;
+  background: #470614;
+  border: 1px solid #470614;
+  text-shadow: 0 0 5px #ffffff, 0 0 10px #ffffff, 0 0 20px #ffffff;
+  box-shadow: 0 0 5px #470614, 0 0 20px #000000, 0 0 50px #ff0037,
+    0 0 100px #470614;
+}
+/* cierre estilos boton eliminar */
