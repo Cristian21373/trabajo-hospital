@@ -529,6 +529,3 @@ function enviarFormulario() {
     }
 }
 
-$(document).ready(function () {
-    listaMedico();
-});

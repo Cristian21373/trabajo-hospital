@@ -18,7 +18,7 @@ function cargarListaMedicos() {
                         if (result[i].estado === "Habilitado") {
                             var option = document.createElement("option");
                             option.value = result[i].id;
-                            option.text = result[i].tipo_documento + "-" + result[i].numero_documento + "-" + result[i].primer_name + " - " + result[i].segundo_name;
+                            option.text = result[i].tipo_documento + "-" + result[i].numero_documento + "-" + result[i].primer_name + " - " + result[i].primer_apellido;
                         
                             medicoSelect.appendChild(option);
                         }
@@ -53,7 +53,7 @@ function cargarListaPacientes() {
                         if (result[i].estado === "Habilitado") {
                             var option = document.createElement("option");
                             option.value = result[i].id;
-                            option.text = result[i].tipo_documento + "-" + result[i].numero_documento + "-" + result[i].primer_name + " - " + result[i].segundo_name;
+                            option.text = result[i].tipo_documento + "-" + result[i].numero_documento + "-" + result[i].primer_name + " - " + result[i].primer_apellido;
                         
                             pacienteSelect.appendChild(option);
                         }
@@ -181,8 +181,8 @@ function listaIngreso() {
                                             <label class="Dark__label"  for="estado">Estado</label>
                                                 <select id="estado" class="form-select Dark__select">
                                                 <option value="" selected disabled>Seleccione una opción</option>
-                                                <option value="Habilitado">Habilitado</option>
-                                                <option value="Deshabilitado">Deshabilitado</option>
+                                                <option value="Habilitado">ingresado</option>
+                                                <option value="Deshabilitado">Alta hospitalaria</option>
                                                 </select>
                                             </div>
                                                     <p style="color: red">Actualiza la pagina una vez guardado los cambios</p>
@@ -243,21 +243,26 @@ function listaIngreso() {
 }
 
 
+
+
 function cargarDatosIngresoEnFormulario(idIngreso) {
-    
     $.ajax({
         url: url + idIngreso,
         type: "GET",
         success: function (ingreso) {
             document.getElementById("habitacion").value = ingreso.habitacion;
             document.getElementById("cama").value = ingreso.cama;
-            document.getElementById("fecha_ingreso").value = ingreso.fechaIngreso;
-            document.getElementById("fecha_salida").value = ingreso.fechaSalida;
+            document.getElementById("fecha_ingreso").value = ingreso.fecha_ingreso;
+            document.getElementById("fecha_salida").value = ingreso.fecha_salida;
             document.getElementById("estado").value = ingreso.estado;
 
             // Cargar la lista de médicos y pacientes en el modal
             cargarListaMedicosEnModal(ingreso.medico.id);
             cargarListaPacientesEnModal(ingreso.paciente.id);
+            
+            // Mostrar las fechas ya ingresadas en el modal
+            document.getElementById("fecha_ingreso").value = ingreso.fecha_ingreso;
+            document.getElementById("fecha_salida").value = ingreso.fecha_salida;
         },
         error: function (error) {
             console.error("Error al obtener datos del Ingreso:", error);
@@ -278,7 +283,7 @@ function cargarListaMedicosEnModal(selectedMedicoId) {
                 for (var i = 0; i < result.length; i++) {
                     var option = document.createElement("option");
                     option.value = result[i].id;
-                    option.text = result[i].tipo_documento + "-" + result[i].primer_name + " - " + result[i].segundo_name;
+                    option.text = result[i].tipo_documento + "-" + result[i].numero_documento + "-" + result[i].primer_name + " - " + result[i].primer_apellido;
                     medicoSelectModal.appendChild(option);
                 }
 
@@ -307,7 +312,7 @@ function cargarListaPacientesEnModal(selectedPacienteId) {
                 for (var i = 0; i < result.length; i++) {
                     var option = document.createElement("option");
                     option.value = result[i].id;
-                    option.text = result[i].id + "-" + result[i].primer_name + " - " + result[i].segundo_name;
+                    option.text = result[i].tipo_documento +  "-" + result[i].numero_documento + "-" + result[i].primer_name + " - " + result[i].primer_apellido;
                     pacienteSelectModal.appendChild(option);
                 }
 
@@ -439,28 +444,49 @@ function registrarIngreso() {
         "estado": document.getElementById("estado").value
     };
 
-    // Verificar si el paciente ya está en un ingreso
-    let pacienteEnIngreso = verificarPacienteEnIngreso(formData.paciente);
-    
-    // Verificar si hay otro paciente en la misma cama
-    let otroPacienteEnCama = verificarOtroPacienteEnCama(formData.cama);
-
-    if (pacienteEnIngreso) {
-        // Mostrar SweetAlert indicando que el paciente ya está registrado en un ingreso
+    // Verificar si hay campos obligatorios vacíos
+    if (!validarCamposObligatorios(formData)) {
         Swal.fire({
             title: "Error",
-            text: "El paciente ya está registrado en un ingreso.",
+            text: "Por favor, llene todos los campos obligatorios.",
             icon: "error"
         });
-    } else if (otroPacienteEnCama) {
-        // Mostrar SweetAlert indicando que ya hay otro paciente en la misma cama
+        return;
+    }
+
+    // Verificar fechas y horarios
+    let fechaIngreso = new Date(formData.fecha_ingreso);
+    let fechaSalida = new Date(formData.fecha_salida);
+
+    if (fechaSalida.getTime() <= fechaIngreso.getTime()) {
+        if (fechaSalida.toDateString() === fechaIngreso.toDateString()) {
+            Swal.fire({
+                title: "Error",
+                text: "La hora de salida debe ser posterior a la hora de ingreso.",
+                icon: "error"
+            });
+            return;
+        } else if (fechaSalida < new Date()) {
+            Swal.fire({
+                title: "Error",
+                text: "La fecha y hora de salida no pueden estar en el pasado.",
+                icon: "error"
+            });
+            return;
+        }
+    }
+    
+    // Verificar si hay otro paciente en la misma habitación y cama
+    let otroPacienteEnCama = verificarOtroPacienteEnCama(formData.habitacion, formData.cama);
+
+    if (otroPacienteEnCama) {
         Swal.fire({
-            title: "Error",
-            text: "Ya hay otro paciente registrado en la misma cama.",
-            icon: "error"
+            title: "Advertencia",
+            text: "Ya hay otro paciente registrado en la misma habitación y cama.",
+            icon: "warning",
+            confirmButtonText: "Aceptar"
         });
     } else {
-        // Se ejecuta la petición
         $.ajax({
             url: url,
             type: "POST",
@@ -474,6 +500,18 @@ function registrarIngreso() {
             }
         });
     }
+}
+
+
+
+function validarCamposObligatorios(formData) {
+    // Verificar si algún campo obligatorio está vacío
+    for (let key in formData) {
+        if (formData.hasOwnProperty(key) && !formData[key]) {
+            return false; // Devolver falso si algún campo está vacío
+        }
+    }
+    return true; // Devolver verdadero si todos los campos obligatorios están llenos
 }
 
 
@@ -503,25 +541,25 @@ function verificarPacienteEnIngreso(idPaciente) {
 }
 
 
-// Función para verificar si hay otro paciente en la misma cama
-function verificarOtroPacienteEnCama(cama) {
+// Función para verificar si hay otro paciente en la misma habitación y cama (solo considerando ingresos habilitados)
+function verificarOtroPacienteEnCama(habitacion, cama) {
     let otroPacienteEnCama = false;
 
-    // Realizar una solicitud al backend para obtener la lista de ingresos
+    // Realizar una solicitud al backend para obtener la lista de ingresos habilitados
     $.ajax({
         url: url,
         type: "GET",
         async: false, // Hacer la solicitud de forma síncrona para esperar la respuesta
         success: function (result) {
             for (let i = 0; i < result.length; i++) {
-                if (result[i].cama === cama) {
+                if (result[i].habitacion === habitacion && result[i].cama === cama && result[i].estado === "Habilitado") {
                     otroPacienteEnCama = true;
                     break;
                 }
             }
         },
         error: function (error) {
-            console.error("Error al obtener la lista de ingresos: " + error);
+            console.error("Error al obtener la lista de ingresos habilitados: " + error);
         }
     });
 
@@ -555,4 +593,74 @@ function validarNumeroCama(cuadroCama) {
     return valido;
 }
 
-// });
+
+//---
+  // Función para validar campos obligatorios antes de enviar el formulario
+  function validarCampos() {
+    var habitacion = document.getElementById("habitacion");
+    var cama = document.getElementById("cama");
+    var fechaIngreso = document.getElementById("fecha_ingreso");
+    var fechaSalida = document.getElementById("fecha_salida");
+    var estado = document.getElementById("estado");
+
+    var habitacionValido = validarNumeroCama(habitacion);
+    var camaValido = validarNumeroCama(cama);
+    var fechaIngresoValido = validarFechaIngreso(fechaIngreso);
+    var fechaSalidaValido = validarFechaSalida(fechaSalida);
+    var estadoValido = validarEstado(estado);
+
+    return habitacionValido && camaValido && fechaIngresoValido && fechaSalidaValido && estadoValido;
+}
+
+// Función para validar la fecha de ingreso
+function validarFechaIngreso(fechaIngreso) {
+    var valor = fechaIngreso.value;
+    var valido = true;
+
+    if (!valor) {
+        valido = false;
+    }
+
+    if (valido) {
+        fechaIngreso.className = "form-control is-valid";
+    } else {
+        fechaIngreso.className = "form-control is-invalid";
+    }
+    return valido;
+}
+
+// Función para validar la fecha de salida
+function validarFechaSalida(fechaSalida) {
+    var valor = fechaSalida.value;
+    var valido = true;
+
+    if (!valor) {
+        valido = false;
+    }
+
+    if (valido) {
+        fechaSalida.className = "form-control is-valid";
+    } else {
+        fechaSalida.className = "form-control is-invalid";
+    }
+    return valido;
+}
+
+// Función para validar el estado
+function validarEstado(estado) {
+    var valor = estado.value;
+    var valido = true;
+
+    if (!valor) {
+        valido = false;
+    }
+
+    if (valido) {
+        estado.className = "form-control is-valid";
+    } else {
+        estado.className = "form-control is-invalid";
+    }
+    return valido;
+}
+
+

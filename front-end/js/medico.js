@@ -267,7 +267,9 @@ function guardarCambiosMedico(idMedico) {
 }
 // Agregar función para eliminar un médico
 
+// Función para eliminar un médico
 function eliminarMedico(idMedico) {
+    // Mostrar un cuadro de confirmación utilizando SweetAlert
     Swal.fire({
         title: '¿Estás seguro?',
         text: 'Esta acción no se puede deshacer',
@@ -277,13 +279,16 @@ function eliminarMedico(idMedico) {
         cancelButtonColor: '#3085d6',
         confirmButtonText: 'Sí, eliminar'
     }).then((result) => {
+        // Si el usuario confirma la acción
         if (result.isConfirmed) {
+            // Realizar una solicitud AJAX para eliminar el médico
             $.ajax({
-                url: url + idMedico,
+                url: url + idMedico, // La URL puede depender de la configuración en el código
                 type: "DELETE",
                 success: function (result) {
-                    // Actualizar la lista después de eliminar
+                    // En caso de éxito, actualizar la lista de médicos
                     listaMedico();
+                    // Mostrar un mensaje de éxito utilizando SweetAlert
                     Swal.fire({
                         icon: 'success',
                         title: 'Médico eliminado correctamente',
@@ -292,14 +297,34 @@ function eliminarMedico(idMedico) {
                     });
                 },
                 error: function (error) {
-                    console.error("Error al eliminar médico:", error);
+                    // En caso de error, mostrar un mensaje de error personalizado
+                    if (error.status === 400) {
+                        // El código 400 puede indicar que el médico está siendo utilizado
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'No se puede eliminar porque ya está siendo utilizado en un ingreso',
+                            footer: '<a href="#">¿Por qué tengo este problema?</a>'
+                        });
+                    } else {
+                        // En caso de otros errores, mostrar el mensaje de error genérico
+                        console.error("Error al eliminar Médico:", error);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'No se puede eliminar porque ya está siendo utilizado en un ingreso',
+                            footer: '<a href="./listaIngreso.html">ir a listado de ingresos</a>'
+                        });
+                    }
                 }
             });
         }
     });
 }
 
+
 function registrarMedico() {
+    // Obtener los valores de los campos del formulario
     let formData = {
         "tipo_documento": document.getElementById("tipo_documento").value,
         "numero_documento": document.getElementById("numero_documento").value,
@@ -312,49 +337,122 @@ function registrarMedico() {
         "estado": document.getElementById("estado").value
     };
 
-    if (validarCampos()) {
-        let tipoDocumento = formData["tipo_documento"];
-        let numeroDocumento = formData["numero_documento"];
-        validarDocumentoRepetido(tipoDocumento, numeroDocumento, function(result) {
-            if (result) {
-                alert("El tipo y número de documento ya están en uso.");
-            } else {
-                // El tipo y número de documento no están repetidos, proceder con el registro
-                $.ajax({
-                    url: url,
-                    type: "POST",
-                    data: formData,
-                    success: function (result) {
-                        alert("Se guardó correctamente");
-                    },
-                    error: function (error) {
+    let tipoDocumento = formData["tipo_documento"];
+    let numeroDocumento = formData["numero_documento"];
+
+    // Verificar duplicación de tipo y número de documento
+    validarDocumentoRepetido(tipoDocumento, numeroDocumento, function(documentoRepetido) {
+        if (documentoRepetido) {
+            alert("El tipo y número de documento ya están en uso.");
+        } else {
+            // Verificar duplicación de teléfono y correo
+            validarTelefonoCorreo(formData["telefono"], formData["correo"], function(telefonoRepetido, correoRepetido) {
+                if (telefonoRepetido && correoRepetido) {
+                    alert("El teléfono y el correo ya están en uso.");
+                } else if (telefonoRepetido) {
+                    alert("El teléfono ya está en uso.");
+                } else if (correoRepetido) {
+                    alert("El correo ya está en uso.");
+                } else {
+                    // Si no hay duplicados, proceder con el registro
+                    // Validar campos obligatorios al final
+                    if (!validarCampos()) {
                         Swal.fire({
-                            icon: "error",
-                            title: "Error",
-                            text: "No se guardó correctamente",
-                            width: 600,
-                            padding: "3em",
-                            color: "#716add",
-                            background: "#fff url(cat.gif)",
-                            backdrop: `
-                                rgba(0,0,123,0.4)
-                                url(https://i.gifer.com/2iiJ.gif)
-                                left top
-                                no-repeat
-                            `
+                            title: "ERROR",
+                            text: "Llene todos los campos correctamente",
+                            icon: "error"
                         });
+                        return;
                     }
-                });
-            }
-        });
-    } else {
-        Swal.fire({
-            title: "ERROR",
-            text: "Llene todos los campos correctamente",
-            icon: "error"
-        });
-    }
+
+                    // Los campos son válidos, proceder con el registro
+                    $.ajax({
+                        url: url,
+                        type: "POST",
+                        data: formData,
+                        success: function (result) {
+                            alert("Se guardó correctamente");
+                        },
+                        error: function (error) {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Error",
+                                text: "No se guardó correctamente",
+                                width: 600,
+                                padding: "3em",
+                                color: "#716add",
+                                background: "#fff url(cat.gif)",
+                                backdrop: `
+                                    rgba(0,0,123,0.4)
+                                    url(https://i.gifer.com/2iiJ.gif)
+                                    left top
+                                    no-repeat
+                                `
+                            });
+                        }
+                    });
+                }
+            });
+        }
+    });
 }
+
+function validarTelefonoCorreo(telefono, correo, callback) {
+    // Validar teléfono
+    $.ajax({
+        url: url, 
+        type: "GET",
+        data: {
+            telefono: telefono
+        },
+        success: function (resultTelefono) {
+            var telefonoRepetido = resultTelefono.some(item => item.telefono === telefono);
+            
+            // Validar correo después de validar el teléfono
+            $.ajax({
+                url: url, 
+                type: "GET",
+                data: {
+                    correo: correo
+                },
+                success: function (resultCorreo) {
+                    var correoRepetido = resultCorreo.some(item => item.correo === correo);
+                    callback(telefonoRepetido, correoRepetido);
+                },
+                error: function (errorCorreo) {
+                    console.error("Error al verificar el correo:", errorCorreo);
+                    callback(false, false);
+                }
+            });
+        },
+        error: function (errorTelefono) {
+            console.error("Error al verificar el teléfono:", errorTelefono);
+            callback(false, false);
+        }
+    });
+}
+
+function validarCorreo(correo, callback) {
+    $.ajax({
+        url: url, // Reemplaza "URL de tu API" con la URL real de tu servidor
+        type: "GET",
+        data: {
+            correo: correo
+        },
+        success: function (result) {
+            var correoRepetido = result.some(item => item.correo === correo);
+            // Llama al callback con el resultado de la verificación del correo
+            callback(correoRepetido);
+        },
+        error: function (error) {
+            console.error("Error al verificar el correo:", error);
+            // En caso de error, asumimos que el correo no está repetido
+            callback(false);
+        }
+    });
+}
+
+
 
 // Función para verificar si el tipo y número de documento ya están en uso
 function validarDocumentoRepetido(tipoDocumento, numeroDocumento, callback) {
