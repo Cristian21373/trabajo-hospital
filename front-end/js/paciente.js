@@ -86,7 +86,7 @@ function listaPaciente() {
                                         <div class="container">
                                         <div class="row">
                                         <div class="col col-xl-6 col-12 Dark__containerSelect">
-                                            <label class="Dark__label" for="Tipo_documento">Tipo documento</label>
+                                            <label class="Dark__label" for="Tipo_documento">Tipo documento (Obligatorio)</label>
                                             <select id="tipo_documento" class="form-select">
                                                 <option value="" selected disabled>Seleccione una opción</option>
                                                 <option value="RC">Registro Civil</option>
@@ -96,46 +96,46 @@ function listaPaciente() {
                                             </select>
                                         </div>
                                         <div class="col col-xl-6 col-12 Dark__container">
-                                            <label class="Dark__label" for="numero_documento">Número de documento</label>
+                                            <label class="Dark__label" for="numero_documento">Número de documento (Obligatorio)</label>
                                             <input type="number" id="numero_documento" step="1" class="form-control Dark__input">
                                         </div>
                                         <div class="col col-xl-6 col-12 Dark__container">
-                                            <label class="Dark__label" for="primer_name">Primer Nombre</label>
+                                            <label class="Dark__label" for="primer_name">Primer Nombre (Obligatorio)</label>
                                             <input type="text" id="primer_name" class="form-control Dark__input">
                                         </div>
                                         <div class="col col-xl-6 col-12 Dark__container">
-                                            <label class="Dark__label" for="segundo_name">Segundo Nombre</label>
+                                            <label class="Dark__label" for="segundo_name">Segundo Nombre (Opciona)</label>
                                             <input type="text" id="segundo_name" class="form-control Dark__input">
                                         </div>
                                         <div class="col col-xl-6 col-12 Dark__container">
-                                            <label class="Dark__label" for="primer_apellido">Primer Apellido</label>
+                                            <label class="Dark__label" for="primer_apellido">Primer Apellido (Obligatorio)</label>
                                             <input type="text" id="primer_apellido" class="form-control Dark__input">
                                         </div>
                                         <div class="col col-xl-6 col-12 Dark__container">
-                                            <label class="Dark__label" for="segundo_apellido">Segundo Apellido</label>
+                                            <label class="Dark__label" for="segundo_apellido">Segundo Apellido (Opciona)</label>
                                             <input type="text" id="segundo_apellido" class="form-control Dark__input">
                                         </div>
                                         <div class="col col-xl-6 col-12 Dark__container">
-                                            <label class="Dark__label" for="telefono">Teléfono</label>
+                                            <label class="Dark__label" for="telefono">Teléfono (Obligatorio)</label>
                                             <input type="text" id="telefono" class="form-control Dark__input">
                                         </div>
                                         <div class="col col-xl-6 col-12 Dark__container">
-                                            <label class="Dark__label" for="correo">Correo</label>
+                                            <label class="Dark__label" for="correo">Correo (Obligatorio)</label>
                                             <input type="text" id="correo" class="form-control Dark__input">
                                         </div>
                             
                                         <div class="col col-xl-6 col-12 Dark__container">
-                                            <label class="Dark__label" for="nombre_contacto">Nombre de contacto</label>
+                                            <label class="Dark__label" for="nombre_contacto">Nombre de contacto (Obligatorio)</label>
                                             <input type="text" id="nombre_contacto" class="form-control Dark__input">
                                         </div>
                             
                                         <div class="col col-xl-6 col-12 Dark__container">
-                                            <label class="Dark__label" for="telefono_contacto">Teléfono de contacto</label>
+                                            <label class="Dark__label" for="telefono_contacto">Teléfono de contacto (Obligatorio)</label>
                                             <input type="text" id="telefono_contacto" class="form-control Dark__input">
                                         </div>
 
                                         <div class="col col-xl-6 col-12  Dark__containerSelect">
-                                        <label class="Dark__label"  for="estado">Estado</label>
+                                        <label class="Dark__label"  for="estado">Estado (Obligatorio)</label>
                                         <select id="estado" class="form-select Dark__select">
                                             <option value="" selected disabled>Seleccione una opción</option>
                                             <option value="Habilitado">Habilitado</option>
@@ -226,6 +226,7 @@ function cargarDatosPacienteEnFormulario(idPaciente) {
     });
 }
 
+
 function guardarCambiosPaciente(idPaciente) {
     let formData = {
         "tipo_documento": document.getElementById("tipo_documento").value,
@@ -240,6 +241,30 @@ function guardarCambiosPaciente(idPaciente) {
         "telefono_contacto": document.getElementById("telefono_contacto").value,
         "estado": document.getElementById("estado").value
     };
+
+    const camposObligatorios = ["numero_documento", "primer_name", "primer_apellido", "telefono", "correo", "nombre_contacto", "telefono_contacto"];
+    let camposVacios = [];
+
+    // Verificar campos obligatorios vacíos
+    camposObligatorios.forEach(campo => {
+        if (!formData[campo].trim()) {
+            camposVacios.push(campo);
+        }
+    });
+
+    if (camposVacios.length > 0) {
+        // Construir mensaje de alerta
+        let mensajeAlerta = "Favor llenar todos los campos obligatorios";
+        
+
+        // Mostrar alerta usando SweetAlert2
+        Swal.fire({
+            icon: 'warning',
+            title: 'Campos obligatorios vacíos',
+            text: mensajeAlerta,
+        });
+        return; // Detener el proceso de guardado
+    }
 
     const swalWithBootstrapButtons = Swal.mixin({
         customClass: {
@@ -268,13 +293,11 @@ function guardarCambiosPaciente(idPaciente) {
                     let modalInstance = bootstrap.Modal.getInstance(modal);
                     modalInstance.hide();
 
-                    // Recargar la página después de guardar los cambios
                     swalWithBootstrapButtons.fire({
                         title: "Cambios guardados",
                         text: "Los cambios se guardaron correctamente.",
                         icon: "success"
                     }).then(() => {
-                        // Llamar a listaPaciente() después de cerrar el mensaje
                         listaPaciente(); // Actualizar la lista después de guardar
                     });
                 },
@@ -294,6 +317,13 @@ function guardarCambiosPaciente(idPaciente) {
         }
     });
 }
+
+
+// Función para validar campos obligatorios
+function validarCamposObligatorios(formData) {
+    return formData.tipo_documento && formData.numero_documento && formData.primer_name && formData.telefono && formData.correo && formData.nombre_contacto && formData.telefono_contacto && formData.estado;
+}
+
 
 // Función para eliminar un paciente
 function eliminarPaciente(idPaciente) {

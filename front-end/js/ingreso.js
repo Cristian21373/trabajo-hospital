@@ -1,7 +1,7 @@
-
 var url = "http://localhost:8080/api/v1/ingreso/";
 
-// Función para cargar la lista de medicos al cargar la página
+
+// Función para cargar la lista de médicos al cargar la página
 function cargarListaMedicos() {
     document.addEventListener("DOMContentLoaded", function () {
         var medicoSelect = document.getElementById("medicoSelect");
@@ -13,16 +13,28 @@ function cargarListaMedicos() {
                 url: "http://localhost:8080/api/v1/medico/",
                 type: "GET",
                 success: function (result) {
-                    
                     for (var i = 0; i < result.length; i++) {
+                        // Verificar si el médico está habilitado antes de agregarlo al select
                         if (result[i].estado === "Habilitado") {
                             var option = document.createElement("option");
                             option.value = result[i].id;
                             option.text = result[i].tipo_documento + "-" + result[i].numero_documento + "-" + result[i].primer_name + " - " + result[i].primer_apellido;
-                        
                             medicoSelect.appendChild(option);
                         }
                     }
+
+                    // Agregar un evento al cambio de selección del select
+                    medicoSelect.addEventListener("change", function () {
+                        var selectedOption = this.options[this.selectedIndex];
+                        if (selectedOption.getAttribute("data-deshabilitado") === "true") {
+                            // Si la opción seleccionada está deshabilitada, mostrar una alerta de confirmación
+                            var confirmacion = confirm("Este médico está deshabilitado. ¿Estás seguro de querer seleccionarlo?");
+                            if (!confirmacion) {
+                                // Si el usuario cancela, seleccionar la opción por defecto
+                                this.value = '';
+                            }
+                        }
+                    });
                 },
                 error: function (error) {
                     console.error("Error al obtener la lista de Medicos: " + error);
@@ -33,6 +45,8 @@ function cargarListaMedicos() {
         }
     });
 }
+
+
 
 cargarListaMedicos();
 
@@ -242,22 +256,23 @@ function listaIngreso() {
     });
 }
 
-
-
-
+// Función para cargar los datos del ingreso en el formulario de edición
 function cargarDatosIngresoEnFormulario(idIngreso) {
     $.ajax({
         url: url + idIngreso,
         type: "GET",
         success: function (ingreso) {
+            // Asignar valores a los campos del formulario de edición
             document.getElementById("habitacion").value = ingreso.habitacion;
             document.getElementById("cama").value = ingreso.cama;
             document.getElementById("fecha_ingreso").value = ingreso.fecha_ingreso;
             document.getElementById("fecha_salida").value = ingreso.fecha_salida;
             document.getElementById("estado").value = ingreso.estado;
 
-            // Cargar la lista de médicos y pacientes en el modal
+            // Cargar la lista de médicos en el selector del modal
             cargarListaMedicosEnModal(ingreso.medico.id);
+            
+            // Cargar la lista de pacientes en el selector del modal
             cargarListaPacientesEnModal(ingreso.paciente.id);
             
             // Mostrar las fechas ya ingresadas en el modal
@@ -265,33 +280,45 @@ function cargarDatosIngresoEnFormulario(idIngreso) {
             document.getElementById("fecha_salida").value = ingreso.fecha_salida;
         },
         error: function (error) {
-            console.error("Error al obtener datos del Ingreso:", error);
+            console.error("Error al obtener datos del ingreso:", error);
         }
     });
 }
 
+
+
+
+// Función para cargar la lista de médicos en el modal de edición de ingresos
 function cargarListaMedicosEnModal(selectedMedicoId) {
     var medicoSelectModal = document.getElementById("medicoSelectModal");
 
     if (medicoSelectModal) {
-        // Realizar una solicitud al backend para obtener la lista de Médicos
-        // y llenar el select con las opciones
+        // Limpiar el selector antes de agregar nuevas opciones
+        medicoSelectModal.innerHTML = "";
+
+        // Realizar una solicitud al backend para obtener la lista de médicos
         $.ajax({
             url: "http://localhost:8080/api/v1/medico/",
             type: "GET",
             success: function (result) {
-                for (var i = 0; i < result.length; i++) {
+                // Filtrar la lista de médicos para incluir solo los habilitados
+                var medicosHabilitados = result.filter(function(medico) {
+                    return medico.estado === "Habilitado";
+                });
+
+                // Llenar el selector con las opciones de médicos habilitados
+                medicosHabilitados.forEach(function(medico) {
                     var option = document.createElement("option");
-                    option.value = result[i].id;
-                    option.text = result[i].tipo_documento + "-" + result[i].numero_documento + "-" + result[i].primer_name + " - " + result[i].primer_apellido;
+                    option.value = medico.id;
+                    option.text = medico.tipo_documento + "-" + medico.numero_documento + "-" + medico.primer_name + " " + medico.primer_apellido;
                     medicoSelectModal.appendChild(option);
-                }
+                });
 
                 // Seleccionar el médico correspondiente al ingreso
                 medicoSelectModal.value = selectedMedicoId;
             },
             error: function (error) {
-                console.error("Error al obtener la lista de Medicos: " + error);
+                console.error("Error al obtener la lista de médicos: " + error);
             }
         });
     } else {
@@ -299,22 +326,26 @@ function cargarListaMedicosEnModal(selectedMedicoId) {
     }
 }
 
+// Función para cargar la lista de pacientes en el modal de edición de ingresos
 function cargarListaPacientesEnModal(selectedPacienteId) {
     var pacienteSelectModal = document.getElementById("pacienteSelectModal");
 
     if (pacienteSelectModal) {
+        // Limpiar el selector antes de agregar nuevas opciones
+        pacienteSelectModal.innerHTML = "";
+
         // Realizar una solicitud al backend para obtener la lista de pacientes
-        // y llenar el select con las opciones
         $.ajax({
             url: "http://localhost:8080/api/v1/paciente/",
             type: "GET",
             success: function (result) {
-                for (var i = 0; i < result.length; i++) {
+                // Llenar el selector con las opciones de pacientes
+                result.forEach(function(paciente) {
                     var option = document.createElement("option");
-                    option.value = result[i].id;
-                    option.text = result[i].tipo_documento +  "-" + result[i].numero_documento + "-" + result[i].primer_name + " - " + result[i].primer_apellido;
+                    option.value = paciente.id;
+                    option.text = paciente.tipo_documento + "-" + paciente.numero_documento + "-" + paciente.primer_name + " " + paciente.primer_apellido;
                     pacienteSelectModal.appendChild(option);
-                }
+                });
 
                 // Seleccionar el paciente correspondiente al ingreso
                 pacienteSelectModal.value = selectedPacienteId;
@@ -330,6 +361,7 @@ function cargarListaPacientesEnModal(selectedPacienteId) {
 
 
 function guardarCambiosIngreso(idIngreso) {
+    // Verificar campos obligatorios nuevamente
     let formData = {
         "habitacion": document.getElementById("habitacion").value,
         "cama": document.getElementById("cama").value,
@@ -339,6 +371,30 @@ function guardarCambiosIngreso(idIngreso) {
         "fecha_salida": document.getElementById("fecha_salida").value,
         "estado": document.getElementById("estado").value
     };
+
+    // Verificar si hay campos obligatorios vacíos
+    if (!validarCamposObligatorios(formData)) {
+        Swal.fire({
+            title: "Error",
+            text: "Por favor, llene todos los campos obligatorios.",
+            icon: "error"
+        });
+        return;
+    }
+
+    // Convertir las fechas ingresadas a objetos Date para comparación
+    let fechaIngreso = new Date(formData.fecha_ingreso);
+    let fechaSalida = new Date(formData.fecha_salida);
+
+    // Verificar si la fecha de salida es anterior a la fecha de ingreso
+    if (fechaSalida <= fechaIngreso) {
+        Swal.fire({
+            title: "Error",
+            text: "La fecha de salida debe ser posterior a la fecha de ingreso.",
+            icon: "error"
+        });
+        return;
+    }
 
     const swalWithBootstrapButtons = Swal.mixin({
         customClass: {
@@ -432,6 +488,7 @@ function eliminarIngreso(idIngreso) {
 
 
 
+
 // Función para registrar un ingreso
 function registrarIngreso() {
     let formData = {
@@ -475,18 +532,17 @@ function registrarIngreso() {
             return;
         }
     }
-    
-    // Verificar si hay otro paciente en la misma habitación y cama
-    let otroPacienteEnCama = verificarOtroPacienteEnCama(formData.habitacion, formData.cama);
 
-    if (otroPacienteEnCama) {
+    // Verificar si hay otro paciente en la misma habitación y cama durante el mismo intervalo de tiempo
+    if (verificarPacienteEnIntervalo(formData.habitacion, formData.cama, fechaIngreso, fechaSalida)) {
         Swal.fire({
             title: "Advertencia",
-            text: "Ya hay otro paciente registrado en la misma habitación y cama.",
+            text: "Ya hay otro paciente en el mismo horario.",
             icon: "warning",
             confirmButtonText: "Aceptar"
         });
     } else {
+        // Si no hay conflicto, procede con el registro del ingreso
         $.ajax({
             url: url,
             type: "POST",
@@ -500,6 +556,38 @@ function registrarIngreso() {
             }
         });
     }
+}
+
+function verificarPacienteEnIntervalo(habitacion, cama, fechaIngreso, fechaSalida) {
+    let pacienteEnIntervalo = false;
+
+    // Realizar una solicitud al backend para obtener la lista de ingresos
+    $.ajax({
+        url: url,
+        type: "GET",
+        async: false, // Hacer la solicitud de forma síncrona para esperar la respuesta
+        success: function (result) {
+            for (let i = 0; i < result.length; i++) {
+                let ingreso = result[i];
+                if (ingreso.habitacion === habitacion && ingreso.cama === cama) {
+                    let ingresoFechaIngreso = new Date(ingreso.fecha_ingreso);
+                    let ingresoFechaSalida = new Date(ingreso.fecha_salida);
+                    // Verificar si hay superposición de intervalos de tiempo
+                    if ((fechaIngreso >= ingresoFechaIngreso && fechaIngreso < ingresoFechaSalida) ||
+                        (fechaSalida > ingresoFechaIngreso && fechaSalida <= ingresoFechaSalida) ||
+                        (fechaIngreso <= ingresoFechaIngreso && fechaSalida >= ingresoFechaSalida)) {
+                        pacienteEnIntervalo = true;
+                        break;
+                    }
+                }
+            }
+        },
+        error: function (error) {
+            console.error("Error al obtener la lista de ingresos: " + error);
+        }
+    });
+
+    return pacienteEnIntervalo;
 }
 
 
@@ -570,11 +658,81 @@ function verificarOtroPacienteEnCama(habitacion, cama) {
 
 
 
-// Función para validar campos (puedes agregar más validaciones según tus requisitos)
+// Función para validar si la cama está disponible en el rango de tiempo especificado
+function verificarCamaDisponible(habitacion, cama, fechaIngreso, fechaSalida) {
+    let camaDisponible = true;
+
+    // Realizar una solicitud al backend para obtener la lista de ingresos
+    $.ajax({
+        url: url,
+        type: "GET",
+        async: false, // Hacer la solicitud de forma síncrona para esperar la respuesta
+        success: function (result) {
+            for (let i = 0; i < result.length; i++) {
+                if (result[i].habitacion === habitacion && result[i].cama === cama) {
+                    let fechaIngresoIngreso = new Date(result[i].fecha_ingreso);
+                    let fechaSalidaIngreso = new Date(result[i].fecha_salida);
+
+                    // Verificar si hay solapamiento en el rango de tiempo
+                    if ((fechaIngresoIngreso >= fechaIngreso && fechaIngresoIngreso < fechaSalida) ||
+                        (fechaSalidaIngreso > fechaIngreso && fechaSalidaIngreso <= fechaSalida) ||
+                        (fechaIngresoIngreso <= fechaIngreso && fechaSalidaIngreso >= fechaSalida)) {
+                        camaDisponible = false;
+                        break;
+                    }
+                }
+            }
+        },
+        error: function (error) {
+            console.error("Error al obtener la lista de ingresos: " + error);
+        }
+    });
+
+    return camaDisponible;
+}
+
+// Función para validar campos obligatorios antes de enviar el formulario
 function validarCampos() {
     var habitacion = document.getElementById("habitacion");
-    return validarNumeroCama(habitacion);
+    var cama = document.getElementById("cama");
+    var fechaIngreso = document.getElementById("fecha_ingreso");
+    var fechaSalida = document.getElementById("fecha_salida");
+    var estado = document.getElementById("estado");
+
+    var habitacionValido = validarNumeroCama(habitacion);
+    var camaValido = validarNumeroCama(cama);
+    var fechaIngresoValido = validarFechaIngreso(fechaIngreso);
+    var fechaSalidaValido = validarFechaSalida(fechaSalida);
+    var estadoValido = validarEstado(estado);
+
+
+    if (fechaIngresoValido && fechaSalidaValido) {
+        var fechaIngresoValue = new Date(fechaIngreso.value);
+        var fechaSalidaValue = new Date(fechaSalida.value);
+
+        if (fechaSalidaValue <= fechaIngresoValue) {
+            fechaSalida.className = "form-control is-invalid";
+            fechaSalidaValido = false;
+        }
+    }
+
+    // Verificar si la cama está disponible en el rango de tiempo especificado
+    if (habitacionValido && camaValido && fechaIngresoValido && fechaSalidaValido) {
+        var camaDisponible = verificarCamaDisponible(habitacion.value, cama.value, new Date(fechaIngreso.value), new Date(fechaSalida.value));
+        if (!camaDisponible) {
+            Swal.fire({
+                title: "Advertencia",
+                text: "La cama seleccionada ya está ocupada en el rango de tiempo especificado.",
+                icon: "warning",
+                confirmButtonText: "Aceptar"
+            });
+            return false;
+        }
+    }
+
+    return habitacionValido && camaValido && fechaIngresoValido && fechaSalidaValido && estadoValido;
 }
+
 
 // Función para validar el número de cama
 function validarNumeroCama(cuadroCama) {
@@ -662,5 +820,65 @@ function validarEstado(estado) {
     }
     return valido;
 }
+// Función para validar campos obligatorios antes de enviar el formulario
+function validarCampos() {
+    var habitacion = document.getElementById("habitacion");
+    var cama = document.getElementById("cama");
+    var fechaIngreso = document.getElementById("fecha_ingreso");
+    var fechaSalida = document.getElementById("fecha_salida");
+    var estado = document.getElementById("estado");
 
+    var habitacionValido = validarNumeroCama(habitacion);
+    var camaValido = validarNumeroCama(cama);
+    var fechaIngresoValido = validarFechaIngreso(fechaIngreso);
+    var fechaSalidaValido = validarFechaSalida(fechaSalida);
+    var estadoValido = validarEstado(estado);
+
+    // Verificar que la fecha de salida sea posterior a la fecha de ingreso
+    if (fechaIngresoValido && fechaSalidaValido) {
+        var fechaIngresoValue = new Date(fechaIngreso.value);
+        var fechaSalidaValue = new Date(fechaSalida.value);
+
+        if (fechaSalidaValue <= fechaIngresoValue) {
+            fechaSalida.className = "form-control is-invalid";
+            fechaSalidaValido = false;
+        }
+    }
+
+    return habitacionValido && camaValido && fechaIngresoValido && fechaSalidaValido && estadoValido;
+}
+
+// Función para validar la fecha de ingreso
+function validarFechaIngreso(fechaIngreso) {
+    var valor = fechaIngreso.value;
+    var valido = true;
+
+    if (!valor) {
+        valido = false;
+    }
+
+    if (valido) {
+        fechaIngreso.className = "form-control is-valid";
+    } else {
+        fechaIngreso.className = "form-control is-invalid";
+    }
+    return valido;
+}
+
+// Función para validar la fecha de salida
+function validarFechaSalida(fechaSalida) {
+    var valor = fechaSalida.value;
+    var valido = true;
+
+    if (!valor) {
+        valido = false;
+    }
+
+    if (valido) {
+        fechaSalida.className = "form-control is-valid";
+    } else {
+        fechaSalida.className = "form-control is-invalid";
+    }
+    return valido;
+}
 
